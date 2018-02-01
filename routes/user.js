@@ -19,7 +19,8 @@ api.get('/probando-controlador',md_auth.ensureAuth, UserController.pruebas);
 api.post('/register', UserController.saveUser);
 //login por post
 api.post('/login', UserController.loginUser);
-
+//para el update put: para actualizar id? es opcional,sino oblig
+api.put("/update-user/:id",md_auth.ensureAuth, UserController.updateUser);
 
 //exportar
 module.exports = api;
