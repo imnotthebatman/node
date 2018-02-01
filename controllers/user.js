@@ -6,6 +6,9 @@ var bcrypt = require("bcrypt-nodejs");
 //para el save User importo el modelo 
 var User = require('../models/user');
 
+//para el token
+var jwt = require("../services/jwt");
+
 
 //método
 function pruebas(req,res){
@@ -99,8 +102,8 @@ function loginUser(req,res){
 					
 					
 					//corregir esto del password 
-					console.log(password);
-					console.log(user.password);
+					//console.log(password);
+					//console.log(user.password);
 					
 					
 					
@@ -115,6 +118,10 @@ function loginUser(req,res){
 							
 							//respuesta http con el token
 							
+							
+							res.status(200).send({ //propiedad llamada token
+								token: jwt.createToken(user)								
+							});
 						}
 						else{ //el nombre de la propiedad es user si no indico otra cosa
 							res.status(200).send({user});
