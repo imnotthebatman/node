@@ -6,6 +6,9 @@ var bcrypt = require("bcrypt-nodejs");
 //para el save User importo el modelo 
 var User = require('../models/user');
 
+//para el token
+var jwt = require("../services/jwt");
+
 
 //método
 function pruebas(req,res){
@@ -99,8 +102,8 @@ function loginUser(req,res){
 					
 					
 					//corregir esto del password 
-					console.log(password);
-					console.log(user.password);
+					//console.log(password);
+					//console.log(user.password);
 					
 					
 					
@@ -115,6 +118,10 @@ function loginUser(req,res){
 							
 							//respuesta http con el token
 							
+							
+							res.status(200).send({ //propiedad llamada token
+								token: jwt.createToken(user)								
+							});
 						}
 						else{ //el nombre de la propiedad es user si no indico otra cosa
 							res.status(200).send({user});
@@ -135,9 +142,38 @@ function loginUser(req,res){
 }
 
 
+//actualizar usuarios
+function updateUser(req,res){
+	//lleva variable por url
+	var userId = req.params.id;
+	//conseguir el body del post 
+	var update = req.body;
+	
+	//userId es el idactual, update los queremos modificar
+	User.findByIdAndUpdate(userId,update,(err,userUpdated)=> {
+		if(err){
+			res.status(500).send({message:"Error al actualizar el usuario"});			
+		}else{
+			if(!userUpdated){
+				res.status(404).send({message:"No se ha podido actualizar el usuario"});				
+			}
+			else{
+				res.status(200).send({user:userUpdated});
+			}
+		}
+		
+		
+	});
+	
+}
+
+
+
+
 //para usarla
 module.exports = {
 	pruebas,
 	saveUser,
-	loginUser
+	loginUser,
+	updateUser
 };
