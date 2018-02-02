@@ -147,20 +147,18 @@ function updateUser(req,res){
 	//lleva variable por url
 	var userId = req.params.id;
 	//conseguir el body del post 
-	var update = req.bod;
+	var update = req.body;
 	
 	//userId es el idactual, update los queremos modificar
 	User.findByIdAndUpdate(userId,update,(err,userUpdated)=> {
-		//si devuelve error
 		if(err){
 			res.status(500).send({message:"Error al actualizar el usuario"});			
 		}else{
 			if(!userUpdated){
-				res.status(404).send({message:"No se ha podido actualizar el usuario"});
-				
+				res.status(404).send({message:"No se ha podido actualizar el usuario"});				
 			}
 			else{
-				res.status(200).send({user:"userUpdated"});
+				res.status(200).send({user:userUpdated});
 			}
 		}
 		
