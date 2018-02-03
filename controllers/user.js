@@ -1,13 +1,24 @@
 'use strict'
 
+//para trabajar con los ficheros del sistema
+var fs = require("fs");
+var path = require("path");
+
+
 //encriptar contraseña
 var bcrypt = require("bcrypt-nodejs");
-
 //para el save User importo el modelo 
 var User = require('../models/user');
-
 //para el token
 var jwt = require("../services/jwt");
+
+
+
+
+
+
+
+
 
 
 //método
@@ -168,6 +179,66 @@ function updateUser(req,res){
 }
 
 
+//método del controlador
+function uploadImage(req,res){
+	//id usuario
+	var userId = req.params.id;
+	//nombre fichero por defecto no subido
+	var fileName = "No subido...";	
+	//si viene algo por files
+	if(req.files){
+			// fichero que vamos a subir 
+			var file_path=req.files.image.path;
+			
+			//voy a recortar el filepath
+			var file_split = file_path.split('\\');//array
+			var file_name = file_split[2];
+			
+			//extension
+			var ext_split = file_name.split('\.');
+			var file_ext = ext_split[1];
+			
+			
+			//comprobar extension
+		if(file_ext == "png" || file_ext == "jpg" || file_ext == "gif"){
+			 //subir imagen	
+			 User.findByIdAndUpdate(userId, {image: file_name}, (err, userUpdated) =>{			
+					if(!userUpdated){
+						res.status(404).send({message:"No se ha podido actualizar el usuario"});				
+					}
+					else{
+						res.status(200).send({user:userUpdated});
+					}				 
+			 });		
+			console.log(ext_split);		
+		}else{
+			res.status(200).send({message:"no ha subido ninguna imagen"});
+		}
+
+	}
+
+};
+
+
+
+
+
+//función para obtener la imagen
+function getImageFile(req,res){
+	var imageFile = req.params.imageFile;
+	var path_file ="./uploads/users/" + imageFile;
+	fs.exists(path_file, function(exists){
+		if(exists){
+			//en vez de dar una respuesta envía el fichero
+			res.sendFile(path.resolve(path_file));
+			
+		}else{
+			res.status(200).send({message:"No existe la imagen"});
+		}
+		
+	});
+	
+}
 
 
 //para usarla
@@ -175,5 +246,7 @@ module.exports = {
 	pruebas,
 	saveUser,
 	loginUser,
-	updateUser
+	updateUser,
+	uploadImage,
+	getImageFile
 };
