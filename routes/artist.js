@@ -10,7 +10,14 @@ var api  = express.Router();
 var md_auth = require("../middlewares/authenticated");
 
 //rutas
-api.get('/artist',md_auth.ensureAuth , ArtistController.getArtist);
+api.get('/artist/:id',md_auth.ensureAuth , ArtistController.getArtist);
+api.post('/artist',md_auth.ensureAuth , ArtistController.saveArtist); //guardar artista
+//mostrar artistas
+api.get('/artists/:page?',md_auth.ensureAuth , ArtistController.getArtists);
+//put actualizar artistas
+api.put('/artist/:id',md_auth.ensureAuth , ArtistController.updateArtist);
+//borrar artista
+api.delete('/artist/:id',md_auth.ensureAuth , ArtistController.deleteArtist);
 
 
 

@@ -56,7 +56,7 @@ function saveUser(req,res){
 	if(params.password){
 		
 		
-		//encriptar contraseña y guardar datos, le paso tb una función de calva
+		//encriptar contraseña y guardar datos, le paso tb una función de callback
 		bcrypt.hash(params.password,null,null, function(err,hash){
 			//si ningún error le asigno al pass del usuario el valor del hash
 			user.password = hash;
