@@ -15,4 +15,4 @@ var ArtistSchema = Schema({
 
 //exportamos el modelo : Artist (nombre de la entidad, esquema artist)
 //así tenemos un objeto artist que podremos instanciar
-module.exports = mongoose.model('Artist', 'ArtistSchema');
+module.exports = mongoose.model('Artist', ArtistSchema);
