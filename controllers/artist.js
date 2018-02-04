@@ -183,9 +183,62 @@ function deleteArtist(req,res){
 }
 
 
+function uploadImage(req,res){
+	//recibimos por url
+	var artistId = req.params.id;
+	var file_name = "No subido"; //valor por defecto 
+	
+	//usar el middleware para subir la imagen 
+	//si viene algo por files
+	if(req.files){
+			// fichero que vamos a subir 
+			var file_path=req.files.image.path;
+			
+			//voy a recortar el filepath
+			var file_split = file_path.split('\\');//array
+			var file_name = file_split[2];
+			
+			//extension
+			var ext_split = file_name.split('\.');
+			var file_ext = ext_split[1];
+			
+			
+			//comprobar extension
+		if(file_ext == "png" || file_ext == "jpg" || file_ext == "gif"){
+			 //subir imagen	(Artist es la colección de mongodb)
+			 Artist.findByIdAndUpdate(artistId, {image: file_name}, (err, artistUpdated) =>{			
+					if(!artistUpdated){
+						res.status(404).send({message:"No se ha podido actualizar el artista"});				
+					}
+					else{
+						res.status(200).send({artist:artistUpdated});
+					}				 
+			 });		
+			console.log(ext_split);		
+		}else{
+			res.status(200).send({message:"no ha subido ninguna imagen"});
+		}
+	}
+}
 
 
 
+//función para obtener la imagen
+function getImageFile(req,res){
+	var imageFile = req.params.imageFile;
+	var path_file ="./uploads/artists/" + imageFile;
+	fs.exists(path_file, function(exists){
+		if(exists){
+			//en vez de dar una respuesta envía el fichero
+			res.sendFile(path.resolve(path_file));
+			
+		}else{
+			res.status(200).send({message:"No existe la imagen"});
+		}
+		
+	});
+	
+}
 
 
 
@@ -195,6 +248,8 @@ module.exports = {
 	saveArtist,
 	getArtists,
 	updateArtist,
-	deleteArtist
+	deleteArtist,
+	uploadImage,
+	getImageFile
 	
 };
