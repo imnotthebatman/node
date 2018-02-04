@@ -17,4 +17,4 @@ var AlbumSchema = Schema({
 
 //exportamos el modelo : Album (nombre de la entidad, esquema artist)
 //así tenemos un objeto Album que podremos instanciar
-module.exports = mongoose.model('Album', 'AlbumSchema');
+module.exports = mongoose.model('Album', AlbumSchema); //sin comillas el segundo

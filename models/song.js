@@ -17,4 +17,4 @@ var SongSchema = Schema({
 
 //exportamos el modelo : Song(nombre de la entidad, esquema artist)
 //así tenemos un objeto Song que podremos instanciar
-module.exports = mongoose.model('Song', 'SongSchema');
+module.exports = mongoose.model('Song', SongSchema);
